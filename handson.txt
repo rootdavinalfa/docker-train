@@ -1,0 +1,9 @@
+Dockerfile section:
+1. Build Dockerfile with docker build --build-args SERVER_PORT=8080 -t docker-train .
+2. Run with docker run -d docker-train
+
+
+docker-compose section:
+1. Using docker-compose up
+2. Using docker-compose down for remove stack
+3. Using docker-compose up -d --scale docker-train=5 for scaling

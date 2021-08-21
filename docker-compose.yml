@@ -1,0 +1,38 @@
+version: '3'
+services:
+  lb-train:
+    image: eeacms/haproxy
+    restart: always
+    depends_on:
+      - docker-train
+    networks:
+      - training
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+      - "1936:1936"
+    environment:
+      STATS_AUTH: "train:123456"
+      FRONTEND_PORT: ${SERVER_PORT}
+      BACKENDS: "docker-train"
+      BACKENDS_PORT: ${SERVER_PORT}
+      DNS_ENABLED: "True"
+      HTTPCHK: "GET /"
+      INTER: "5s"
+      LOG_LEVEL: "info"
+    env_file: 
+      - .env
+
+  docker-train:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - SERVER_PORT=${SERVER_PORT}
+    networks:
+      - training
+    env_file:
+      - .env
+    restart: always
+networks: 
+  training:
+    driver: bridge
