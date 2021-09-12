@@ -32,6 +32,9 @@ services:
       - training
     env_file:
       - .env
+    volumes: 
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/etc/timezone:/etc/timezone:ro"
     restart: always
 networks: 
   training:
