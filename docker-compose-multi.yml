@@ -1,0 +1,41 @@
+version: '3'
+services:
+  lb-train:
+    image: eeacms/haproxy
+    restart: always
+    depends_on:
+      - docker-train-multi
+    networks:
+      - training
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+      - "1936:1936"
+    environment:
+      STATS_AUTH: "train:123456"
+      FRONTEND_PORT: ${SERVER_PORT}
+      BACKENDS: "docker-train-multi"
+      BACKENDS_PORT: ${SERVER_PORT}
+      DNS_ENABLED: "True"
+      HTTPCHK: "GET /"
+      INTER: "5s"
+      LOG_LEVEL: "info"
+    env_file: 
+      - .env
+
+  docker-train-multi:
+    build:
+      context: .
+      dockerfile: DockerfileMultistage
+      args:
+        - SERVER_PORT=${SERVER_PORT}
+    networks:
+      - training
+    env_file:
+      - .env
+    volumes: 
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/etc/timezone:/etc/timezone:ro"
+    restart: always
+networks: 
+  training:
+    driver: bridge

@@ -7,3 +7,4 @@ docker-compose section:
 1. Using docker-compose up
 2. Using docker-compose down for remove stack
 3. Using docker-compose up -d --scale docker-train=5 for scaling
+4. Using docker-compose -f docker-compose-multi.yml up -d for multi stage handson
